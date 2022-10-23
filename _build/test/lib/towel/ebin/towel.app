@@ -1,0 +1,10 @@
+{application,towel,
+             [{applications,[kernel,stdlib,elixir]},
+              {description,"A delightfully simple monad library that's written for Elixir."},
+              {modules,['Elixir.Functor','Elixir.Functor.Atom',
+                        'Elixir.Functor.Function','Elixir.Functor.List',
+                        'Elixir.Functor.Tuple','Elixir.Maybe','Elixir.Monad',
+                        'Elixir.Monad.Atom','Elixir.Monad.List',
+                        'Elixir.Monad.Tuple','Elixir.Result','Elixir.Towel']},
+              {registered,[]},
+              {vsn,"0.2.1"}]}.
