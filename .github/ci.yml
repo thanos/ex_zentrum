@@ -1,64 +1,64 @@
-# https://github.com/dashbitco/broadway/blob/master/.github/workflows/ci.yml
+# # https://github.com/dashbitco/broadway/blob/master/.github/workflows/ci.yml
 
-name: CI
-on: push
+# name: CI
+# on: push
 
-jobs:
-  test:
-    # using `ubuntu-latest` does not support older OTP versions
-    runs-on: ubuntu-18.04
-    env:
-      MIX_ENV: test
-      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-    strategy:
-      fail-fast: false
-      matrix:
-        # https://repo.hex.pm/builds/elixir/builds.txt
-        elixir: [1.11.4, 1.12.3, 1.13.2, 1.14]
-        otp: [21.x, 22.x, 23.x, 24.x, 25.x]
-        exclude:
-          - elixir: 1.11.4
-            otp: 25.x
-          - elixir: 1.12.3
-            otp: 21.x
-          - elixir: 1.12.3
-            otp: 25.x
-          - elixir: 1.13.2
-            otp: 21.x
-          - elixir: 1.14
-            otp: 21.x
-          - elixir: 1.14
-            otp: 22.x
-        include:
-          - elixir: 1.14
-            otp: 25.x
-            lint: lint
-            coverage: coverage
-    steps:
-      - uses: actions/checkout@v3
+# jobs:
+#   test:
+#     # using `ubuntu-latest` does not support older OTP versions
+#     runs-on: ubuntu-18.04
+#     env:
+#       MIX_ENV: test
+#       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         # https://repo.hex.pm/builds/elixir/builds.txt
+#         elixir: [1.11.4, 1.12.3, 1.13.2, 1.14]
+#         otp: [21.x, 22.x, 23.x, 24.x, 25.x]
+#         exclude:
+#           - elixir: 1.11.4
+#             otp: 25.x
+#           - elixir: 1.12.3
+#             otp: 21.x
+#           - elixir: 1.12.3
+#             otp: 25.x
+#           - elixir: 1.13.2
+#             otp: 21.x
+#           - elixir: 1.14
+#             otp: 21.x
+#           - elixir: 1.14
+#             otp: 22.x
+#         include:
+#           - elixir: 1.14
+#             otp: 25.x
+#             lint: lint
+#             coverage: coverage
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: ${{matrix.otp}}
-          elixir-version: ${{matrix.elixir}}
+#       - uses: erlef/setup-beam@v1
+#         with:
+#           otp-version: ${{matrix.otp}}
+#           elixir-version: ${{matrix.elixir}}
 
-      - name: Install Dependencies
-        run: mix deps.get --only test
+#       - name: Install Dependencies
+#         run: mix deps.get --only test
 
-      - run: mix format --check-formatted
-        if: ${{ matrix.lint }}
+#       - run: mix format --check-formatted
+#         if: ${{ matrix.lint }}
 
-      - run: mix deps.get && mix deps.unlock --check-unused
-        if: ${{ matrix.lint }}
+#       - run: mix deps.get && mix deps.unlock --check-unused
+#         if: ${{ matrix.lint }}
 
-      - run: mix deps.compile
+#       - run: mix deps.compile
 
-      - run: mix compile --warnings-as-errors
-        if: ${{ matrix.lint }}
+#       - run: mix compile --warnings-as-errors
+#         if: ${{ matrix.lint }}
 
-      - run: mix test
+#       - run: mix test
 
-      - run: mix coveralls.github
-        if: ${{matrix.coverage}}
+#       - run: mix coveralls.github
+#         if: ${{matrix.coverage}}
 
-      - run: MIX_ENV=docs mix do deps.get
+#       - run: MIX_ENV=docs mix do deps.get
