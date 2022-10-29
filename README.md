@@ -1,6 +1,6 @@
 # ExZentrum
 
-Elixir wrapper for interacting with the Zentrum Hotel Api
+Elixir wrapper for interacting with the Zentrum's Hotel Api
 
 ## Installation
 
