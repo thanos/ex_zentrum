@@ -25,36 +25,7 @@ describe "api unit tests" do
   #   assert {:error, nil} = ExZentrum.coords_from_address("tiperari,Planet Mars")
   # end
 
-  @ok_reponse %HTTPoison.Response{
-    status_code: 200,
-    body: <<31, 139, 8, 0, 0, 0, 0, 0, 4, 3, 236, 189, 137, 110, 227, 72, 151,
-      166, 125, 43, 132, 49, 192, 244, 224, 79, 166, 184, 47, 133, 158, 30, 56,
-      119, 87, 238, 118, 174, 213, 211, 72, 4, 201, 160, 68, 91, 155, 169>>,
-    headers: [
-      {"Date", "Fri, 28 Oct 2022 16:46:22 GMT"},
-      {"Content-Type", "application/json; charset=utf-8"},
-      {"Transfer-Encoding", "chunked"},
-      {"Connection", "keep-alive"},
-      {"Server", "Kestrel"},
-      {"Content-Encoding", "gzip"},
-      {"Vary", "Accept-Encoding"}
-    ],
-    request_url: "https://nexus.prod.zentrumhub.com/api/content/hotelcontent/getHotelContent",
-    request: %HTTPoison.Request{
-      method: :post,
-      url: "https://nexus.prod.zentrumhub.com/api/content/hotelcontent/getHotelContent",
-      headers: [
-        apiKey: "cfed5799-4be0-4ad2-b8c1-4c9e04e985fb",
-        "customer-ip": "192.168.1.194",
-        accountId: "xa_cnioupcivt",
-        "Accept-Encoding": "gzip, deflate",
-        "Content-Type": "application/json"
-      ],
-      body: "{\"channelId\":\"xa-live-channel\",\"circularRegion\":{\"centerLat\":40.7587905,\"centerLong\":-73.9787755,\"radiusInKM\":1},\"contentFields\":[\"All\"],\"culture\":\"en-US\",\"filterBy\":{\"ratings\":{\"max\":5,\"min\":5}}}",
-      params: %{},
-      options: [recv_timeout: 25000]
-    }
-  }
+
 
 
 
@@ -72,7 +43,7 @@ end
 
 test "hotel_content_headers" do
   key = Application.fetch_env!(:ex_zentrum, :api_key)
-  assert  assert match?([{:apiKey,  key}|_], ExZentrum.hotel_content_headers())
+  assert  assert match?([{:apiKey,  ^key}|_], ExZentrum.hotel_content_headers())
 end
 
 

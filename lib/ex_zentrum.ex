@@ -3,10 +3,6 @@
   Documentation for `ExZentrum`.
   """
 
-
-
-
-
   def coords_from_address(address) when is_binary(address) do
     case result = Geocoder.call(address)  do
       {:ok,  %Geocoder.Coords{lat: lat, lon: lon, location: location}} ->
@@ -27,12 +23,7 @@
   end
 
 
-  @con_options [recv_timeout: 25000]
-
-
-
-
-
+@con_options [recv_timeout: 25000]
 
 @hotel_content_request %{
     "culture" => "en-US",
@@ -100,6 +91,7 @@
       "All"
     ]
 }
+
   def get_hotel_availability_for_destination(location, check_in,  check_out, occupancies, options  \\ %{})
       when is_binary(location) and is_map(options) do
 
