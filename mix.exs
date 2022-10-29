@@ -38,6 +38,7 @@ defmodule ExZentrum.MixProject do
       {:excoveralls, "~> 0.15.0", only: :test},
       {:jason, "~> 1.4"},
       {:httpoison, "~> 1.8"},
+      {:uuid, "~> 1.1"},
 
       {:dotenv_parser, "~> 2.0"},
       {:mox, "~> 1.0"}
