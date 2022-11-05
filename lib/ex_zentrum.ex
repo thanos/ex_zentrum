@@ -149,11 +149,14 @@ def get_hotel_content_for_geocode(lat, lon, iso3, options  \\ %{}) do
   def filter_by_country(hotels, country_code) do
     lc_country_code = String.upcase(country_code)
     hotels
-    |> Enum.filter(fn %{"contact" =>
-      %{"address"  =>
-        %{"country" => %{"code" => code}}}} ->
-          lc_country_code == code
-        end)
+    |> Enum.filter(fn %{"contact" => %{"address"  => address}} ->
+        case address do
+            %{"country" => %{"code" => code}} -> 
+                lc_country_code == code
+            _ -> 
+                true
+        end
+      end)
   end
 def decode_body(headers, body) do
   g_zipped =
