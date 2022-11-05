@@ -40,13 +40,13 @@
                         when is_binary(location) and is_map(options) do
     hotel_content_uri = "#{Application.get_env(:ex_zentrum, :end_point)}/api/content/hotelcontent/getHotelContent"
     with  {:ok, {lat, lon,  %Geocoder.Location{country_code: country_code}}} <- coords_from_address(location) do
-                    get_hotel_content_for_gecode(lat, lon, country_code)    
+                    get_hotel_content_for_geocode(lat, lon, country_code)    
           else
                     some_error ->  {:error, some_error}
           end
   end
 
-def get_hotel_content_for_gecode(lat, lon, iso3, options  \\ %{}) do
+def get_hotel_content_for_geocode(lat, lon, iso3, options  \\ %{}) do
     hotel_content_uri = "#{Application.get_env(:ex_zentrum, :end_point)}/api/content/hotelcontent/getHotelContent"
     with  {:ok, %{body: body, status_code: 200, headers: headers}} <- http_client().post(hotel_content_uri, build_content_request(@hotel_content_request, lat, lon,  options), hotel_content_headers(), @con_options),
                  {:ok, %{ "hotels" => hotels}} <- decode_body(headers, body) do
