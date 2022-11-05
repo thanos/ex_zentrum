@@ -39,15 +39,25 @@
   def get_hotel_content_for_destination(location, options  \\ %{})
                         when is_binary(location) and is_map(options) do
     hotel_content_uri = "#{Application.get_env(:ex_zentrum, :end_point)}/api/content/hotelcontent/getHotelContent"
-    with  {:ok, {lat, lon,  %Geocoder.Location{country_code: country_code}}} <-  coords_from_address(location),
-            {:ok, %{body: body, status_code: 200, headers: headers}} <- http_client().post(hotel_content_uri, build_content_request(@hotel_content_request, lat, lon,  options), hotel_content_headers(), @con_options),
-                 {:ok, %{ "hotels" => hotels}} <- decode_body(headers, body) do
-                    # IO.inspect(reponse, [limit: :infinity])
-                    {:ok, hotels |> filter_by_country(country_code)}
+    with  {:ok, {lat, lon,  %Geocoder.Location{country_code: country_code}}} <- coords_from_address(location) do
+                    get_hotel_content_for_gecode(lat, lon, country_code)    
           else
                     some_error ->  {:error, some_error}
           end
   end
+
+def get_hotel_content_for_gecode(lat, lon, iso3, options  \\ %{}) do
+    hotel_content_uri = "#{Application.get_env(:ex_zentrum, :end_point)}/api/content/hotelcontent/getHotelContent"
+    with  {:ok, %{body: body, status_code: 200, headers: headers}} <- http_client().post(hotel_content_uri, build_content_request(@hotel_content_request, lat, lon,  options), hotel_content_headers(), @con_options),
+                 {:ok, %{ "hotels" => hotels}} <- decode_body(headers, body) do
+                    # IO.inspect(reponse, [limit: :infinity])
+                    {:ok, hotels |> filter_by_country(iso3)}
+          else
+                    some_error ->  {:error, some_error}
+          end
+  end
+
+
 
   def hotel_content_headers do
     [
@@ -123,6 +133,7 @@
     ]
   end
 
+  @spec build_availability_request(float(), float(), binary, any) :: binary
   def build_availability_request(centerLat, centerLong, hotel_availability_request, options \\ %{}) do
     circularRegion = %{
       "centerLat" => centerLat,
@@ -144,15 +155,6 @@
           lc_country_code == code
         end)
   end
-
-
-
-
-
-
-
-
-
 def decode_body(headers, body) do
   g_zipped =
   Enum.any?(headers, fn kv ->
